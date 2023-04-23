@@ -39,8 +39,8 @@ def send(this_input, sleep=0.5):
             kbd.send(item)
     time.sleep(sleep)
 
-send(payload1)
 time.sleep(0.2)
+send(payload1)
 send(payload2)
 send(payload3)
 send(payload4)
